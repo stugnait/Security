@@ -26,9 +26,11 @@ public class ProductService {
 
 
     public ProductDTO findById(Long id) {
-        return repo.findById(id).map(ProductMapper::toDTO)
+        return repo.findById(id)
+                .map(ProductMapper::toDTO)
                 .orElseThrow(() -> new NotFoundException("Product %d not found".formatted(id)));
     }
+
 
 
     public ProductDTO create(ProductDTO dto) {

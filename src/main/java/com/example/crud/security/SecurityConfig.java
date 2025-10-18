@@ -4,6 +4,7 @@ package com.example.crud.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
@@ -15,7 +16,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
-
+@EnableMethodSecurity
 @Configuration
 public class SecurityConfig {
 
@@ -47,12 +48,20 @@ public class SecurityConfig {
                 .password(encoder.encode("admin123"))
                 .roles("ADMIN")
                 .build();
+
+        UserDetails manager = User.withUsername("manager")
+                .password(encoder.encode("manager123"))
+                .roles("MANAGER")
+                .build();
+
         UserDetails user = User.withUsername("user")
                 .password(encoder.encode("user123"))
                 .roles("USER")
                 .build();
-        return new InMemoryUserDetailsManager(admin, user);
+
+        return new InMemoryUserDetailsManager(admin, manager, user);
     }
+
 
 
     @Bean
